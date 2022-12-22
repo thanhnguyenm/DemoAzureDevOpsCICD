@@ -43,7 +43,7 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v2.2.0
         if: always()
         with:
-          trx_files: "**/*.xml"
+          xunit_files: "test-results/xunit/**/*.xml"
       - name: Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
