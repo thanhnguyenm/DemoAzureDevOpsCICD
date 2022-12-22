@@ -32,10 +32,16 @@ jobs:
           dotnet-verion: ${{ env.DOTNET_VERSION }}
       - name: Install dependencies
         run: dotnet restore
-      
+
       - name: Build
         run: dotnet build --configuration Release --no-restore
       
       - name: Test
-        run: dotnet test --no-restore --verbosity normal
+        run: dotnet test --no-restore --verbosity normal --logger "trx;LogFileName=test-result.trx" || true
         
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2.2.0
+        if: always()
+        with:
+          trx_files: "**/*.trx"
+  
