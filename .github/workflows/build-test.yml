@@ -15,12 +15,13 @@ env:
   DOTNET_VERSION: '6.0.401'
   
 jobs:
-  Build:
+  Build-And-Test:
     name: build-${{matrix.os}}
     runs-on: ${{matrix.os}}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        #os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [ubuntu-latest]
         
     steps:
       - name: Check out repository
@@ -34,5 +35,7 @@ jobs:
       
       - name: Build
         run: dotnet build --configuration Release --no-restore
-        
+      
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal
         
