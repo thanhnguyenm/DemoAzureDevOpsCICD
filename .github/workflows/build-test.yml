@@ -43,11 +43,11 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v2.2.0
         if: always()
         with:
-          xunit_files: "test-results/xunit/**/*.xml"
+          xunit_files: "**/test-results/**/*.xml"
       - name: Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: "**/*.xml"
+          filename: "**/test-results/**/*.xml"
           badge: true
           fail_below_min: true
           format: markdown
