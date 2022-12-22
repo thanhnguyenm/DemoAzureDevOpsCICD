@@ -66,6 +66,11 @@ jobs:
         with:
           path: "**/coverage.cobertura.xml"
           thresholds: 60
+          fail: true
+          publish: true
+          diff: true
+          diff-branch: main
+          diff-storage: _xml_coverage_reports
 
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2.2.0
