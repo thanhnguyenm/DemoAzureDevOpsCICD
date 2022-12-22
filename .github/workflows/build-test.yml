@@ -37,7 +37,6 @@ jobs:
         run: dotnet build --configuration Release --no-restore
       
       - name: Test
-        #run: dotnet test --no-restore --verbosity normal --logger "trx;LogFileName=test-result.trx" || true --collect "XPlat Code Coverage"
         run: dotnet test --no-restore --verbosity normal --logger "xunit;LogFilePath=test_result.xml" --collect "XPlat Code Coverage"
         
       - name: Publish Test Results
