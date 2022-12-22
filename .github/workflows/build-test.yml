@@ -1,0 +1,66 @@
+name: Build and Test asp.net core
+run-name:  ${{ github.actor }} is building source code and running tests
+on:
+  push:
+    branches:
+      - main
+      - poc/actions
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'The reason for running the workflow'
+        required: true
+        default: 'Manual run'
+env:
+  DOTNET_VERSION: '6.0.401'
+  
+jobs:
+  Build-And-Test:
+    name: build-${{matrix.os}}
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        #os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [ubuntu-latest]
+        
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-verion: ${{ env.DOTNET_VERSION }}
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal --logger "xunit;LogFilePath=test_result.xml" --collect "XPlat Code Coverage"
+        
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2.2.0
+        if: always()
+        with:
+          xunit_files: "**/TestResults/**/*.xml"
+      - name: Code Coverage Report
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        if: always()
+        with:
+          filename: "**/TestResults/**/*.xml"
+          badge: true
+          fail_below_min: true
+          format: markdown
+          hide_branch_rate: false
+          hide_complexity: true
+          indicators: true
+          output: both
+          thresholds: '60 80'
+
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: ${{ always() && github.event_name == 'pull_request' }}
+        with:
+          recreate: true
+          path: code-coverage-results.md
