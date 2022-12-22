@@ -8,7 +8,7 @@ jobs:
       - run: echo "A"
       - run: echo "B"
       - name: Check out repository code
-        uses: actions/checkout@3
+        uses: actions/checkout@v3
       - name: List all files in repo
         run: |
           ls ${{ github.workspace }}
