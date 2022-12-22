@@ -1,4 +1,4 @@
-name Demo Github Action: Build and Test asp.net core
+name: Build and Test asp.net core
 run-name:  ${{ github.actor }} is building source code and running tests
 on:
   push:
