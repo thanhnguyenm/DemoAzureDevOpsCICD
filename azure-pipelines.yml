@@ -1,0 +1,81 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+# https://azuredevopsdemogenerator.azurewebsites.net/
+# PAT pk5it4w646y3npaah3xv64duhfyivgyisxn3atq43pmf5oeosteq
+# lap 01: generate devops https://microsoftlearning.github.io/AZ400-DesigningandImplementingMicrosoftDevOpsSolutions/Instructions/Labs/AZ400_M01_L01_Agile_Planning_and_Portfolio_Management_with_Azure_Boards.html
+# change comment to trigger build
+
+trigger:
+  branches:
+    include:
+    - main
+    - feature/*
+    exclude:
+    - dev/*
+
+pool:
+  # vmImage: 'windows-latest'
+  name: DemoCICD pool
+  demands:
+  #- agent.name -equals pyco-laptop
+  - agent.name -equals thanh-pc
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+stages:
+- stage: Build
+  jobs:
+  - job: A
+    # displayName: My First Job
+    # continueOnError: true
+    # workspace:
+    #   clean: outputs
+    steps:
+    - task: NuGetToolInstaller@1
+      inputs:
+        versionSpec: '> 4.0.0'
+
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
+
+    - task: VSBuild@1
+      inputs:
+        solution: '$(solution)'
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+
+    - task: VSTest@2
+      inputs:
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+
+  - job: B
+    steps:
+    - script: echo 'job B'
+
+  - job: C
+    dependsOn:
+    - A
+    steps:
+    - script: echo 'job C'
+- stage: Deploy
+  jobs:
+  - job: Deploy_Service_1
+    steps:
+    - script: echo 'Deploy-Service-1'
+
+  - template: azure-pipeplines-template.yml
+    parameters:
+      name: Windows
+      pool:
+        name: DemoCICD pool
+        demands:
+          - agent.name -equals thanh-pc
+        sign: true

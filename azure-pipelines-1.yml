@@ -1,0 +1,107 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- main
+
+pool:
+  vmImage: 'windows-latest'
+  # name: DemoCICD pool
+  # demands:
+  # #- agent.name -equals pyco-laptop
+  # - agent.name -equals thanh-pc
+
+variables:
+  solution: '**/*.sln'
+  projects: '**/*.csproj'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+stages:
+- stage: Build
+  jobs:
+  - job: buildprojects 
+    steps:
+    - task: NuGetToolInstaller@1
+      displayName: 'Nuget install'
+      inputs:
+        versionSpec: 
+        checkLatest: true
+
+    - task: NuGetCommand@2
+      displayName: 'Nuget restore'
+      inputs:
+        restoreSolution: '$(solution)'
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'publish'
+        publishWebProjects: false
+        projects: '$(projects)'
+        arguments: '--configuration release --output $(build.artifactStagingDirectory)'
+
+    - task: VSTest@2
+      inputs:
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+- stage: PublishWebservice
+  dependsOn: Build
+  condition: |
+    and(
+      succeeded(),
+      or(
+        eq(variables['build.sourceBranch'], 'refs/heads/main'),
+        startsWith(variables['build.sourceBranch'], 'refs/heads/pyco1/')
+      )
+    )
+  jobs:
+  - job: publishwebites
+    workspace:
+      clean: all
+    steps:
+    
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'drop'
+        targetPath: '$(Pipeline.Workspace)/drop/'
+
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'Azure subscription 1 (54c9a724-15c4-4db9-93b9-e5ea575c53f3)'
+        appType: 'webApp'
+        WebAppName: 'demodevopswebmvc'
+        packageForLinux: '$(Pipeline.Workspace)/**/WebMVC.zip'
+    
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'Azure subscription 1 (54c9a724-15c4-4db9-93b9-e5ea575c53f3)'
+        appType: 'webApp'
+        WebAppName: 'demodevopswebapi1'
+        packageForLinux: '$(Pipeline.Workspace)/**/WebApi1.zip'
+    
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'Azure subscription 1 (54c9a724-15c4-4db9-93b9-e5ea575c53f3)'
+        appType: 'webApp'
+        WebAppName: 'demodevopswebapi2'
+        packageForLinux: '$(Pipeline.Workspace)/**/WebApi2.zip'
+    
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'Azure subscription 1 (54c9a724-15c4-4db9-93b9-e5ea575c53f3)'
+        appType: 'webApp'
+        WebAppName: 'demodevopswebapi3'
+        packageForLinux: '$(Pipeline.Workspace)/**/WebApi3.zip'

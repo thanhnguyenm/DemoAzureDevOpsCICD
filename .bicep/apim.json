@@ -1,0 +1,62 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.13.1.58284",
+      "templateHash": "14935122241781635037"
+    }
+  },
+  "parameters": {
+    "apimName": {
+      "type": "string",
+      "defaultValue": "devopsdemoapim"
+    },
+    "publisherEmail": {
+      "type": "string",
+      "defaultValue": "nguyenminhthanhitc@outlook.com"
+    },
+    "publisherName": {
+      "type": "string",
+      "defaultValue": "nguyenminhthanhitc"
+    },
+    "sku": {
+      "type": "string",
+      "defaultValue": "Developer",
+      "allowedValues": [
+        "Developer",
+        "Standard",
+        "Premium"
+      ]
+    },
+    "skuCount": {
+      "type": "int",
+      "defaultValue": 1,
+      "allowedValues": [
+        1,
+        2
+      ]
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ApiManagement/service",
+      "apiVersion": "2021-08-01",
+      "name": "[parameters('apimName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "capacity": "[parameters('skuCount')]",
+        "name": "[parameters('sku')]"
+      },
+      "properties": {
+        "publisherEmail": "[parameters('publisherEmail')]",
+        "publisherName": "[parameters('publisherName')]"
+      }
+    }
+  ]
+}

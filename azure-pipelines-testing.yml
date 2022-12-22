@@ -1,0 +1,76 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- main
+
+variables:
+  solution: '**/*.sln'
+  projects: '**/*.csproj'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    displayName: 'Build and Publish'
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+    - task: NuGetToolInstaller@1
+      displayName: 'NuGet Install'
+
+    - task: NuGetCommand@2
+      displayName: 'Restore Nuget packages'
+      inputs:
+        restoreSolution: '$(solution)'
+
+    - task: MSBuild@1
+      inputs:
+        solution: '**/*.sln'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+        clean: true
+        msbuildArguments: |
+          -p:OutDir=$(build.artifactStagingDirectory)
+
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+
+- stage: RunTestStage
+  jobs:
+  - job: DownloadArtifacts
+    displayName: 'Download Artifacts'
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+    - checkout: 'none'
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'drop'
+        targetPath: '$(Pipeline.Workspace)'
+
+    - task: VSTest@2
+      inputs:
+        testSelector: 'testAssemblies'
+        testAssemblyVer2: |
+          **\Web*.Test.dll
+          !**\*TestAdapter.dll
+          !**\obj\**
+        searchFolder: '$(Pipeline.Workspace)'
+        runInParallel: true
+        codeCoverageEnabled: true
+    
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: 'XUnit'
+        testResultsFiles: '**/TEST-*.xml'
+        searchFolder: '$(Agent.TempDirectory)\TestResults'

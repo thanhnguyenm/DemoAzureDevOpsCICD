@@ -1,0 +1,63 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  solution: '**/*.sln'
+  projects: '**/*.csproj'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: NuGetToolInstaller@1
+  displayName: 'Nuget install'
+  inputs:
+    versionSpec: 
+    checkLatest: true
+
+- task: NuGetCommand@2
+  displayName: 'Nuget restore'
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'sonar service'
+    organization: 'nguyenminhthanhitc'
+    scannerMode: 'MSBuild'
+    projectKey: 'nguyenminhthanhitc_DemoSonarCloud'
+    projectName: 'DemoSonarCloud'
+
+- task: MSBuild@1
+  inputs:
+    solution: '**/*.sln'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: '$(projects)'
+    arguments: '--configuration release --output $(build.artifactStagingDirectory)'
+
+- task: VSTest@2
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    codeCoverageEnabled: true
+
+- task: SonarCloudAnalyze@1
+  displayName: 'Run Sonar analysis'
+
+- task: SonarCloudPublish@1
+  displayName: 'Publish results on build summary'
+  inputs:
+    pollingTimeoutSec: '300'

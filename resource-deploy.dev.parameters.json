@@ -1,0 +1,65 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "servicePlanName": {
+            "value": "demodevops-asp" // TODO: Fill in parameter value
+        },
+        "keyVaultId": {
+            "value": "https://devopsdemokeyvaultcicd.vault.azure.net/" // TODO: Fill in parameter value
+        },
+        "storageAccountName": {
+            "value": "demodevopsstg" // TODO: Fill in parameter value
+        },
+        "appInsightName": {
+            "value": "demodevops-appInsights" // TODO: Fill in parameter value
+        },
+        "webmvcname": {
+            "value": "demodevopswebmvc" // TODO: Fill in parameter value
+        },
+        "webapiname1": {
+            "value": "demodevopswebapi1" // TODO: Fill in parameter value
+        },
+        "azureADInstance": {
+            "value": "https://aadthanhitcsudi.b2clogin.com/" // TODO: Fill in parameter value
+        },
+        "azureADTenantId": {
+            "value": "3b2403a2-9b22-47b9-9ced-e1d4f8f56dd4" // TODO: Fill in parameter value
+        },
+        "azureADDomain": {
+            "value": "aadthanhitcsudi.onmicrosoft.com" // TODO: Fill in parameter value
+        },
+        "azureADWebMVCClientID": {
+            "value": "fbb26087-63d0-43a3-8a95-21f279a271fa" // TODO: Fill in parameter value
+        },
+        "azureADWebMVCClientSecret": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/54c9a724-15c4-4db9-93b9-e5ea575c53f3/resourceGroups/devopsdemorg/providers/Microsoft.KeyVault/vaults/devopsdemokeyvaultcicd"
+                },
+                "secretName": "WebMVCSecret"
+            }
+        },
+        "azureADWebApi1Url": {
+            "value": "https://demodevopswebapi1.azurewebsites.net" // TODO: Fill in parameter value
+        },
+        "azureADwebApi1Scopes": {
+            "value": "https://aadthanhitcsudi.onmicrosoft.com/cb47b92a-aca7-43c1-b052-e2e86509aa3b/access_as_user" // TODO: Fill in parameter value
+        },
+        "azureAdWebApi1ClientId": {
+            "value": "cb47b92a-aca7-43c1-b052-e2e86509aa3b" // TODO: Fill in parameter value
+        },
+        "environment": {
+            "value": "Development"
+        },
+        "redisCacheName": {
+            "value": "demodevopsredis"
+        },
+        "webapiname2": {
+            "value": "demodevopswebapi2" // TODO: Fill in parameter value
+        },
+        "webapiname3": {
+            "value": "demodevopswebapi3" // TODO: Fill in parameter value
+        }
+    }
+}

@@ -1,0 +1,334 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {"servicePlanName": {
+    "type": "string",
+    "metadata": {
+      "description": "service plan for WebMVC and WebApi"
+    }
+  },"keyVaultId": {
+    "type": "string",
+    "metadata": {
+      "description": "description"
+    }
+  }, "storageAccountName": {
+    "type": "string",
+    "metadata": {
+      "description": "Storage account for VM, others"
+    }
+  }, "appInsightName": {
+    "type": "string",
+    "metadata": {
+      "description": "AppInsight for all sources"
+    }
+  }, "webmvcname": {
+    "type": "string",
+    "metadata": {
+      "description": "Web MVC for FE"
+    }
+  }, "webapiname1": {
+    "type": "string",
+    "metadata": {
+      "description": "Web Api service 1"
+    }
+  }, "azureADInstance": {
+    "type": "string",
+    "metadata": {
+      "description": "azure AD Instance"
+    }
+  }, "azureADTenantId": {
+    "type": "string",
+    "metadata": {
+      "description": "Azure AD TenantId"
+    }
+  }, "azureADDomain": {
+    "type": "string",
+    "metadata": {
+      "description": "Azure AD Domain"
+    }
+  }, "azureADWebMVCClientID": {
+    "type": "string",
+    "metadata": {
+      "description": "Azure Web MVC Client ID"
+    }
+  }, "azureADWebMVCClientSecret": {
+    "type": "securestring",
+    "metadata": {
+      "description": "azureADWebMVCClientSecret"
+    }
+  }, "azureADWebApi1Url": {
+    "type": "string",
+    "metadata": {
+      "description": "Azure Web MVC Client ID"
+    }
+  }, "azureADwebApi1Scopes": {
+    "type": "string",
+    "metadata": {
+      "description": "description"
+    }
+  }, "azureAdWebApi1ClientId": {
+    "type": "string",
+    "metadata": {
+      "description": "description"
+    }
+  }, "environment": {
+    "type": "string",
+    "metadata": {
+      "description": "description"
+    }
+  }, "redisCacheName": {
+    "type": "string",
+    "metadata": {
+      "description": "description"
+    }
+  }, "webapiname2": {
+    "type": "string",
+    "metadata": {
+      "description": "description"
+    }
+  }, "webapiname3": {
+    "type": "string",
+    "metadata": {
+      "description": "description"
+    }
+  }},
+  "functions": [],
+  "variables": {},
+  "resources": [{
+    "name": "[parameters('servicePlanName')]",
+    "type": "Microsoft.Web/serverfarms",
+    "apiVersion": "2020-12-01",
+    "location": "[resourceGroup().location]",
+    "sku": {
+      "name": "F1",
+      "capacity": 1
+    },
+    "tags": {
+      "displayName": "[parameters('servicePlanName')]"
+    },
+    "properties": {
+      "name": "[parameters('servicePlanName')]"
+    }
+  }, {
+    "name": "[parameters('storageAccountName')]",
+    "type": "Microsoft.Storage/storageAccounts",
+    "apiVersion": "2021-04-01",
+    "tags": {
+      "displayName": "[parameters('storageAccountName')]"
+    },
+    "location": "[resourceGroup().location]",
+    "kind": "StorageV2",
+    "sku": {
+      "name": "Standard_LRS",
+      "tier": "Standard"
+    }
+  }, {
+    "name": "[parameters('appInsightName')]",
+    "type": "Microsoft.Insights/components",
+    "apiVersion": "2020-02-02",
+    "location": "[resourceGroup().location]",
+    "kind": "Web",
+    "tags": {
+      "displayName": "[parameters('appInsightName')]"
+    },
+    "properties": {
+      "Application_Type": "web",
+      "Request_Source": "rest"
+    }
+  }, {
+    "name": "[parameters('webmvcname')]",
+    "type": "Microsoft.Web/sites",
+    "apiVersion": "2020-12-01",
+    "location": "[resourceGroup().location]",
+    "tags": {
+      "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('servicePlanName'))]": "Resource",
+      "displayName": "[parameters('webmvcname')]"
+    },
+    "dependsOn": [
+      "[resourceId('Microsoft.Web/serverfarms', parameters('servicePlanName'))]",
+      "[resourceId('Microsoft.Insights/components', parameters('appInsightName'))]",
+      "[resourceId('Microsoft.Cache/Redis', parameters('redisCacheName'))]"
+    ],
+    "properties": {
+      "name": "[parameters('webmvcname')]",
+      "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('servicePlanName'))]",
+      "siteConfig": {
+        "appSettings": [
+          {
+            "name": "AzureAD__Instance",
+            "value": "[parameters('azureADInstance')]"
+          },
+          {
+            "name": "AzureAD__TenantId",
+            "value": "[parameters('azureADTenantId')]"
+          },
+          {
+            "name": "AzureAD__Domain",
+            "value": "[parameters('azureADDomain')]"
+          },
+          {
+            "name": "AzureAD__ClientId",
+            "value": "[parameters('azureADWebMVCClientID')]"
+          },
+          {
+            "name": "AzureAD__ClientSecret",
+            "value": "[parameters('azureADWebMVCClientSecret')]"
+          },
+          {
+            "name": "AzureAD__SignUpSignInPolicyId",
+            "value": "B2C_1_SUSI"
+          },
+          {
+            "name": "DownstreamApi__BaseUrl",
+            "value": "[parameters('azureADWebApi1Url')]"
+          },
+          {
+            "name": "DownstreamApi__Scopes",
+            "value": "[parameters('azureADwebApi1Scopes')]"
+          },
+          {
+            "name": "ASPNETCORE_ENVIRONMENT",
+            "value": "[parameters('environment')]"
+          },
+          {
+            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightName')), '2020-02-02').ConnectionString]"
+          },
+          {
+            "name": "Redis__ConnectionString",
+            "value": "[concat(parameters('redisCacheName'),'.redis.cache.windows.net,abortConnect=false,ssl=true,password=', listKeys(resourceId('Microsoft.Cache/Redis', parameters('redisCacheName')), '2020-12-01').primaryKey)]"
+          },
+          {
+            "name": "Redis__Instance",
+            "value": "[parameters('redisCacheName')]"
+          }
+        ]
+      }
+    }
+  }, {
+    "name": "[parameters('webapiname1')]",
+    "type": "Microsoft.Web/sites",
+    "apiVersion": "2020-12-01",
+    "location": "[resourceGroup().location]",
+    "tags": {
+      "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('servicePlanName'))]": "Resource",
+      "displayName": "[parameters('webapiname1')]"
+    },
+    "dependsOn": [
+      "[resourceId('Microsoft.Web/serverfarms', parameters('servicePlanName'))]",
+      "[resourceId('Microsoft.Insights/components', parameters('appInsightName'))]"
+    ],
+    "properties": {
+      "name": "[parameters('webapiname1')]",
+      "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('servicePlanName'))]",
+      "siteConfig": {
+        "appSettings": [
+          {
+            "name": "AzureAD__Instance",
+            "value": "[parameters('azureADInstance')]"
+          },
+          {
+            "name": "AzureAD__TenantId",
+            "value": "[parameters('azureADTenantId')]"
+          },
+          {
+            "name": "AzureAD__Domain",
+            "value": "[parameters('azureADDomain')]"
+          },
+          {
+            "name": "AzureAD__ClientId",
+            "value": "[parameters('azureAdWebApi1ClientId')]"
+          },
+          {
+            "name": "AzureAD__SignUpSignInPolicyId",
+            "value": "B2C_1_SUSI"
+          },
+          {
+            "name": "ASPNETCORE_ENVIRONMENT",
+            "value": "[parameters('environment')]"
+          },
+          {
+            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightName')), '2020-02-02').ConnectionString]"
+          },
+          {
+            "name": "Weburl",
+            "value": "[concat('https://', parameters('webapiname1'), '.azurewebsites.net/')]"
+          }
+        ]
+      }
+    }
+  }, {
+    "name": "[parameters('redisCacheName')]",
+    "type": "Microsoft.Cache/Redis",
+    "apiVersion": "2020-12-01",
+    "location": "[resourceGroup().location]",
+    "tags": {
+      "displayName": "[parameters('redisCacheName')]"
+    },
+    "properties": {
+      "sku": {
+        "name": "Basic",
+        "family": "C",
+        "capacity": 0
+      }
+    }
+  }, {
+    "name": "[parameters('webapiname2')]",
+    "type": "Microsoft.Web/sites",
+    "apiVersion": "2020-12-01",
+    "location": "[resourceGroup().location]",
+    "tags": {
+      "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('servicePlanName'))]": "Resource",
+      "displayName": "[parameters('webapiname2')]"
+    },
+    "dependsOn": [
+      "[resourceId('Microsoft.Web/serverfarms', parameters('servicePlanName'))]"
+    ],
+    "properties": {
+      "name": "[parameters('webapiname2')]",
+      "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('servicePlanName'))]",
+      "siteConfig": {
+        "appSettings": [
+          {
+            "name": "ASPNETCORE_ENVIRONMENT",
+            "value": "[parameters('environment')]"
+          },
+          {
+            "name": "Weburl",
+            "value": "[concat('https://', parameters('webapiname2'), '.azurewebsites.net/')]"
+          }
+        ]
+      }
+    }
+  }, {
+    "name": "[parameters('webapiname3')]",
+    "type": "Microsoft.Web/sites",
+    "apiVersion": "2020-12-01",
+    "location": "[resourceGroup().location]",
+    "tags": {
+      "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('servicePlanName'))]": "Resource",
+      "displayName": "[parameters('webapiname2')]"
+    },
+    "dependsOn": [
+      "[resourceId('Microsoft.Web/serverfarms', parameters('servicePlanName'))]"
+    ],
+    "properties": {
+      "name": "[parameters('webapiname3')]",
+      "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('servicePlanName'))]",
+      "siteConfig": {
+        "appSettings": [
+          {
+            "name": "ASPNETCORE_ENVIRONMENT",
+            "value": "[parameters('environment')]"
+          },
+          {
+            "name": "Weburl",
+            "value": "[concat('https://', parameters('webapiname3'), '.azurewebsites.net/')]"
+          }
+        ]
+      }
+    }
+  }],
+  "outputs": {}
+}
