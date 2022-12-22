@@ -1,0 +1,38 @@
+name Demo Github Action: Build and Test asp.net core
+run-name:  ${{ github.actor }} is building source code and running tests
+on:
+  push:
+    branches:
+      - main
+      - poc/actions
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'The reason for running the workflow'
+        required: true
+        default: 'Manual run'
+env:
+  DOTNET_VERSION: '6.0.401'
+  
+jobs:
+  Build:
+    name: build-${{matrix.os}}
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Setup .NET Core
+        use: actions/setup-dotnet@v3
+        with:
+          dotnet-verion: ${{ env.DOTNET_VERSION }}
+      - name: Install dependencies
+        run: dotnet restore
+      
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+        
+        
