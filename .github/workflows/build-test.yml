@@ -59,7 +59,13 @@ jobs:
         with:
           recreate: true
           path: code-coverage-results.md
-          
+
+      - name: Code Coverage Report Action
+        uses: insightsengineering/coverage-action@v2.1.5
+        with:
+          path: "**/coverage.cobertura.xml"
+          thresholds: 60
+
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2.2.0
         if: always()
