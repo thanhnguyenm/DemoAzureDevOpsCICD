@@ -7,7 +7,7 @@ namespace WebApi1.Test
         [Fact]
         public void Test1()
         {
-            Assert.True(2<1);
+            Assert.True(2>1);
         }
     }
 }
