@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Logging;
+using WebMVC2.Controllers;
 using Xunit;
 
 namespace WebMVC2.Test
@@ -7,7 +9,9 @@ namespace WebMVC2.Test
         [Fact]
         public void Test1()
         {
-            Assert.Equal(1, 1);
+            var controler = new HomeController(Moq.Mock.Of<ILogger<HomeController>>());
+            var result = controler.Index();
+            Assert.NotNull(result);
         }
 
         [Fact]
