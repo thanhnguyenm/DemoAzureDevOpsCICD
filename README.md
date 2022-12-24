@@ -21,3 +21,6 @@ If you want to learn more about creating good readme files then refer the follow
 
 [![Build and Test asp.net core](https://github.com/thanhnguyenm/DemoAzureDevOpsCICD/actions/workflows/build-test.yml/badge.svg?branch=poc%2Factions)](https://github.com/thanhnguyenm/DemoAzureDevOpsCICD/actions/workflows/build-test.yml)
 ![Code Coverage](https://img.shields.io/badge/Code%20Coverage-12%25-critical?style=flat)
+
+
+
