@@ -22,5 +22,11 @@ namespace WebMVC2.Test
         {
             Assert.Equal(1, 1);
         }
+
+        [Fact]
+        public void Test3()
+        {
+            Assert.Equal(2, 1);
+        }
     }
 }
