@@ -22,5 +22,16 @@ namespace WebApi2.Controllers
             };
 
         }
+
+        [HttpGet("getuserdetail/{guid}")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<UserModel>))]
+        public async Task<UserModel> GetUserDetail(Guid guid, CancellationToken cancellationToken)
+        {
+
+            await Task.Delay(100);
+
+            return new UserModel { UserKey = guid, FullName = "Nguyen Minh Thanh", Email = "thanhnm@yopmail.com", Address = "Thong Nhat, Go Vap", City = "Ho Chi Minh" };
+
+        }
     }
 }

@@ -23,9 +23,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi2.Test", "WebApi2.Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi3.Test", "WebApi3.Test\WebApi3.Test.csproj", "{6678EF97-65C3-405D-9A34-BB0D79BCC037}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMVC2", "WebMVC2\WebMVC2.csproj", "{48C5EFB1-4492-431B-BD75-F1EDE2C54B46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebMVC2", "WebMVC2\WebMVC2.csproj", "{48C5EFB1-4492-431B-BD75-F1EDE2C54B46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMVC2.Test", "WebMVC2.Test\WebMVC2.Test.csproj", "{F18D573D-C667-4AD3-9BE6-ECCBB80117BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebMVC2.Test", "WebMVC2.Test\WebMVC2.Test.csproj", "{F18D573D-C667-4AD3-9BE6-ECCBB80117BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetwayApi", "GetwayApi\GetwayApi.csproj", "{408D57D6-6B2B-4D8A-925F-FEF827A3C0DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,6 +79,10 @@ Global
 		{F18D573D-C667-4AD3-9BE6-ECCBB80117BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F18D573D-C667-4AD3-9BE6-ECCBB80117BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F18D573D-C667-4AD3-9BE6-ECCBB80117BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{408D57D6-6B2B-4D8A-925F-FEF827A3C0DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{408D57D6-6B2B-4D8A-925F-FEF827A3C0DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{408D57D6-6B2B-4D8A-925F-FEF827A3C0DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{408D57D6-6B2B-4D8A-925F-FEF827A3C0DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
