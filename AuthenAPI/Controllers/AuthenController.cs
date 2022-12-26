@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -13,14 +14,14 @@ namespace AuthenAPI.Controllers
     {
         [HttpPost]
         [ProducesResponseType(typeof(string), 200)]
-        public async Task<IActionResult> Get(string name, string password)
+        public async Task<IActionResult> Post([FromForm] LoginModel model)
         {
-            if (name.Equals("thanhnmitc") && password.Equals("123"))
+            if (model.Username.Equals("thanhnmitc") && model.Password.Equals("123"))
             {
                 var now = DateTime.UtcNow;
                 var claims = new Claim[]
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, name),
+                    new Claim(JwtRegisteredClaimNames.Sub, model.Username),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, now.ToUniversalTime().ToString(), ClaimValueTypes.Integer64)
                 };
@@ -51,5 +52,10 @@ namespace AuthenAPI.Controllers
 
             return Ok(string.Empty);
         }
+    }
+    public class LoginModel
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
     }
 }

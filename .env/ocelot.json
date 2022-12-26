@@ -5,12 +5,12 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "webapi2",
           "Port": 7148
         },
         //For load balance
         {
-          "Host": "localhost",
+          "Host": "webapi4",
           "Port": 7036
         }
       ],
@@ -26,7 +26,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "webapi2",
           "Port": 7148
         }
       ],
@@ -38,7 +38,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "webapi3",
           "Port": 7130
         }
       ],
@@ -51,7 +51,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "webapi3",
           "Port": 7130
         }
       ],
@@ -64,7 +64,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "webapi2",
           "Port": 7148
         }
       ],
@@ -80,7 +80,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "webapi2",
           "Port": 7148
         }
       ],
@@ -93,7 +93,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "authenservice",
           "Port": 7149
         }
       ],
@@ -102,7 +102,7 @@
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "https://localhost:7030"
+    "BaseUrl": "https://getwayapi:7030"
   },
   "Aggregates": [
     {

@@ -2,16 +2,16 @@
   "Routes": [
     {
       "DownstreamPathTemplate": "/api/user/",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7148
+          "Host": "host.docker.internal",
+          "Port": 5217
         },
         //For load balance
         {
-          "Host": "localhost",
-          "Port": 7036
+          "Host": "host.docker.internal",
+          "Port": 5036
         }
       ],
       "UpstreamPathTemplate": "/user-api/",
@@ -23,11 +23,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/user/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7148
+          "Host": "host.docker.internal",
+          "Port": 5217
         }
       ],
       "UpstreamPathTemplate": "/user-api/{everything}",
@@ -35,11 +35,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/product/",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7130
+          "Host": "host.docker.internal",
+          "Port": 5070
         }
       ],
       "UpstreamPathTemplate": "/product-api/",
@@ -48,11 +48,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/product/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7130
+          "Host": "host.docker.internal",
+          "Port": 5070
         }
       ],
       "UpstreamPathTemplate": "/product-api/{everything}",
@@ -61,11 +61,11 @@
     //Private Service
     {
       "DownstreamPathTemplate": "/api/permission/",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7148
+          "Host": "host.docker.internal",
+          "Port": 5217
         }
       ],
       "UpstreamPathTemplate": "/permission-api/",
@@ -77,11 +77,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/permission/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7148
+          "Host": "host.docker.internal",
+          "Port": 5217
         }
       ],
       "UpstreamPathTemplate": "/permission-api/{everything}",
@@ -90,11 +90,11 @@
     //Authen service
     {
       "DownstreamPathTemplate": "/api/authen/",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 7149
+          "Host": "host.docker.internal",
+          "Port": 5149
         }
       ],
       "UpstreamPathTemplate": "/authen-api/",
@@ -102,7 +102,8 @@
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "https://localhost:7030"
+    "RequestIdKey": "OcRequestId",
+    "AdministrationPath": "/administration"
   },
   "Aggregates": [
     {

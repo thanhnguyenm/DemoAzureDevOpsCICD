@@ -1,0 +1,93 @@
+version: '3.4'
+
+services:
+  webapi2:
+    image: webapi2:v1.0.0
+    build:
+      context: .
+      dockerfile: WebApi2/Dockerfile
+    container_name: ocelotDemo_webapi2
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=123456789x@X
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    ports:
+    - "5217:80"
+    - "7148:443"
+    volumes:
+      - ~/.aspnet/https:/https:ro
+
+  webapi3:
+    image: webapi3:v1.0.0
+    build:
+      context: .
+      dockerfile: WebApi3/Dockerfile
+    container_name: ocelotDemo_webapi3
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=123456789x@X
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    ports:
+    - "5070:80"
+    - "7130:443"
+    volumes:
+      - ~/.aspnet/https:/https:ro
+
+  webapi4:
+    image: webapi4:v1.0.0
+    build:
+      context: .
+      dockerfile: WebApi4/Dockerfile
+    container_name: ocelotDemo_webapi4
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=123456789x@X
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    ports:
+    - "5036:80"
+    - "7036:443"
+    volumes:
+      - ~/.aspnet/https:/https:ro
+
+  authenservice:
+    image: authenservice:v1.0.0
+    build:
+      context: .
+      dockerfile: AuthenAPI/Dockerfile
+    container_name: ocelotDemo_authenservice
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=123456789x@X
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    ports:
+    - "5149:80"
+    - "7149:443"
+    volumes:
+      - ~/.aspnet/https:/https:ro
+
+  getwayapi:
+    image: getwayapi:v1.0.0
+    build:
+      context: .
+      dockerfile: GetwayApi/Dockerfile
+    container_name: ocelotDemo_getwayapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=123456789x@X
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    configs:
+      - source: ocelot_config
+        target: /app/ocelot.json
+    ports:
+    - "5006:80"
+    - "7030:443"
+    volumes:
+      - ~/.aspnet/https:/https:ro
+configs:
+  ocelot_config:
+    file: ./.env/ocelot_http.json

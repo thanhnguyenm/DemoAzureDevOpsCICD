@@ -13,6 +13,8 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("ocelot.json", false, true);
 
+builder.Logging.AddDebug();
+
 // Add services to the container.
 var key = Encoding.ASCII.GetBytes("82DDE48C-F4DF-402B-8B1E-B6BF15F919D7");
 builder.Services.AddAuthentication(option =>
@@ -44,6 +46,9 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+//var files = Directory.GetFiles("./ocelot_config");
+//app.Logger.LogInformation(string.Join(',', files));
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -51,7 +56,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
