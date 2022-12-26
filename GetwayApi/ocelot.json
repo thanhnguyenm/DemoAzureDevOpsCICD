@@ -7,10 +7,19 @@
         {
           "Host": "localhost",
           "Port": 7148
+        },
+        //For load balance
+        {
+          "Host": "localhost",
+          "Port": 7036
         }
       ],
       "UpstreamPathTemplate": "/user-api/",
-      "UpstreamHttpMethod": [ "Get" ]
+      "UpstreamHttpMethod": [ "Get" ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection" //or [RoundRobin, NoLoadBalancer, CookieStickySessions]
+      },
+      "Key": "all-users"
     },
     {
       "DownstreamPathTemplate": "/api/user/{everything}",
@@ -34,7 +43,8 @@
         }
       ],
       "UpstreamPathTemplate": "/product-api/",
-      "UpstreamHttpMethod": [ "Get" ]
+      "UpstreamHttpMethod": [ "Get" ],
+      "Key": "all-products"
     },
     {
       "DownstreamPathTemplate": "/api/product/{everything}",
@@ -47,9 +57,88 @@
       ],
       "UpstreamPathTemplate": "/product-api/{everything}",
       "UpstreamHttpMethod": [ "Get" ]
+    },
+    //Private Service
+    {
+      "DownstreamPathTemplate": "/api/permission/",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7148
+        }
+      ],
+      "UpstreamPathTemplate": "/permission-api/",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/permission/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7148
+        }
+      ],
+      "UpstreamPathTemplate": "/permission-api/{everything}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    //Authen service
+    {
+      "DownstreamPathTemplate": "/api/authen/",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7149
+        }
+      ],
+      "UpstreamPathTemplate": "/authen-api/",
+      "UpstreamHttpMethod": [ "Get", "Post" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/authen/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7149
+        }
+      ],
+      "UpstreamPathTemplate": "/authen-api/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post" ]
     }
   ],
   "GlobalConfiguration": {
     "BaseUrl": "https://localhost:7030"
+  },
+  "Aggregates": [
+    {
+      "UpstreamPathTemplate": "/",
+      "RouteKeys": [
+        "all-products",
+        "all-users"
+      ]
+    }
+  ],
+  "RateLimitOptions": {
+    "ClientWhiteList": [],
+    "EnableRateLimiting": true,
+    "Period": "15s",
+    "PeriodTimeSpan": 1,
+    "Limit": 1
+  },
+  "FileCacheOptions": {
+    "TtlSeconds": 15,
+    "Region": "userfiles"
+  },
+  "QosOptions": {
+    "ExceptionsAllowedBeforeBreaking": 2,
+    "DurationOfBreak": 5000,
+    "TimeoutValue":  2000
   }
 }
