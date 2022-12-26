@@ -1,0 +1,22 @@
+trigger:
+  pipelines:
+  - pipeline: DemoCICD-Build
+    source: DemoCICD (1)
+    project: DemoCICD
+    trigger: true
+
+
+steps:
+- task: AzureRmWebAppDeployment@4
+  displayName: 'Azure Web MVC Deploy'
+  inputs:
+    azureSubscription: 'Azure subscription 1 (54c9a724-15c4-4db9-93b9-e5ea575c53f3)'
+    WebAppName: demodevopswebmvc
+    packageForLinux: '**/WebMVC.zip'
+
+- task: AzureRmWebAppDeployment@4
+  displayName: 'Azure Web Api Deploy'
+  inputs:
+    azureSubscription: 'Azure subscription 1 (54c9a724-15c4-4db9-93b9-e5ea575c53f3)'
+    WebAppName: demodevopswebapi1
+    packageForLinux: '**/WebApi1.zip'
