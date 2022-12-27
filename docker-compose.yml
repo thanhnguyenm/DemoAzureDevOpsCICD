@@ -11,7 +11,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Password=123456789x@X
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=./Certificates/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     ports:
     - "5217:80"
     - "7148:443"
@@ -28,7 +28,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Password=123456789x@X
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=./Certificates/aspnetapp1.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp1.pfx
     ports:
     - "5070:80"
     - "7130:443"
@@ -45,7 +45,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Password=123456789x@X
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=./Certificates/aspnetapp2.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp2.pfx
     ports:
     - "5036:80"
     - "7036:443"
@@ -62,7 +62,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Password=123456789x@X
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=./Certificates/aspnetapp3.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp3.pfx
     ports:
     - "5149:80"
     - "7149:443"
@@ -79,7 +79,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Password=123456789x@X
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=./Certificates/aspnetapp4.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp4.pfx
     configs:
       - source: ocelot_config
         target: /app/ocelot.json
