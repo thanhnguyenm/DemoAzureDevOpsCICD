@@ -5,12 +5,12 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "webapi2",
+          "Host": "host.docker.internal",
           "Port": 7148
         },
         //For load balance
         {
-          "Host": "webapi4",
+          "Host": "host.docker.internal",
           "Port": 7036
         }
       ],
@@ -26,7 +26,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "webapi2",
+          "Host": "host.docker.internal",
           "Port": 7148
         }
       ],
@@ -38,7 +38,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "webapi3",
+          "Host": "host.docker.internal",
           "Port": 7130
         }
       ],
@@ -51,7 +51,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "webapi3",
+          "Host": "host.docker.internal",
           "Port": 7130
         }
       ],
@@ -64,7 +64,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "webapi2",
+          "Host": "host.docker.internal",
           "Port": 7148
         }
       ],
@@ -80,7 +80,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "webapi2",
+          "Host": "host.docker.internal",
           "Port": 7148
         }
       ],
@@ -93,7 +93,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "authenservice",
+          "Host": "host.docker.internal",
           "Port": 7149
         }
       ],
@@ -102,7 +102,7 @@
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "https://getwayapi:7030"
+    "BaseUrl": "https://localhost:7030"
   },
   "Aggregates": [
     {

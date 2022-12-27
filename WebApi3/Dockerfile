@@ -3,6 +3,10 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+# Install prerequisites
+RUN apt-get update && apt-get install -y \
+curl
+
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY WebApi3/WebApi3.csproj WebApi3/

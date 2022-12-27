@@ -16,7 +16,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection();
+if (app.Environment.Equals("Production"))
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthorization();
 

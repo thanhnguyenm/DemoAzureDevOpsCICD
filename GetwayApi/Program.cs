@@ -46,9 +46,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-//var files = Directory.GetFiles("./ocelot_config");
-//app.Logger.LogInformation(string.Join(',', files));
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -56,7 +53,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
