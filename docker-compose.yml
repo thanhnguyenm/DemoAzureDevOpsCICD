@@ -16,7 +16,7 @@ services:
     - "5217:80"
     - "7148:443"
     volumes:
-      - ~/.aspnet/https:/https:ro
+      - /C/Users/LAMDUCCOMPUTER/.aspnet/https:/root/.aspnet/DataProtection-Keys
 
   webapi3:
     image: webapi3:v1.0.0
@@ -33,7 +33,7 @@ services:
     - "5070:80"
     - "7130:443"
     volumes:
-      - ~/.aspnet/https:/https:ro
+      - /C/Users/LAMDUCCOMPUTER/.aspnet/https:/root/.aspnet/DataProtection-Keys
 
   webapi4:
     image: webapi4:v1.0.0
@@ -50,7 +50,7 @@ services:
     - "5036:80"
     - "7036:443"
     volumes:
-      - ~/.aspnet/https:/https:ro
+      - /C/Users/LAMDUCCOMPUTER/.aspnet/https:/root/.aspnet/DataProtection-Keys
 
   authenservice:
     image: authenservice:v1.0.0
@@ -67,7 +67,7 @@ services:
     - "5149:80"
     - "7149:443"
     volumes:
-      - ~/.aspnet/https:/https:ro
+      - /C/Users/LAMDUCCOMPUTER/.aspnet/https:/root/.aspnet/DataProtection-Keys
 
   getwayapi:
     image: getwayapi:v1.0.0
@@ -87,7 +87,7 @@ services:
     - "5006:80"
     - "7030:443"
     volumes:
-      - ~/.aspnet/https:/https:ro
+      - /C/Users/LAMDUCCOMPUTER/.aspnet/https:/root/.aspnet/DataProtection-Keys
 configs:
   ocelot_config:
     file: ./.env/ocelot_http.json
