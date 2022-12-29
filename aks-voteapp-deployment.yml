@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vote-app-back
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vote-app-back
+  template:
+    metadata:
+      labels:
+        app: vote-app-back
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+      - name: vote-app-back
+        image: mcr.microsoft.com/oss/bitnami/redis:6.0.8
+        env:
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "yes"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+        ports:
+        - containerPort: 6379
+          name: redis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vote-app-back-service
+spec:
+  ports:
+  - port: 6379
+  selector:
+    app: vote-app-back
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vote-app-front
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: vote-app-front
+  template:
+    metadata:
+      labels:
+        app: vote-app-front
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+      - name: vote-app-front
+        image: mcr.microsoft.com/azuredocs/azure-vote-front:v1
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+        ports:
+        - containerPort: 80
+          name: voteapphttp
+        env:
+        - name: REDIS
+          value: "vote-app-back-service"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vote-app-front-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: vote-app-front
+---
+#service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: vote-app-front-internal-service
+spec:
+  type: ClusterIP
+  selector:
+    app: vote-app-front
+  ports:
+    - port: 80 # SERVICE exposed port
+      name: http # SERVICE port name
+      protocol: TCP # The protocol the SERVICE will listen to
+      targetPort: voteapphttp # Port to forward to in the POD
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vote-app-front-ingress
+  annotations:
+    kubernetes.io/ingress.class: addon-http-application-routing
+spec:
+  rules:
+    - host: voteapp.a6330cf17bec4c78a772.eastasia.aksapp.io # A FQDN that describes the host where that rule should be applied
+      http:
+        paths:
+          - backend: # How the ingress will handle the requests
+              service:
+               name: vote-app-front-internal-service # Which service the request will be forwarded to
+               port:
+                 name: http # Which port in that service
+            path: / # Which path is this rule referring to
+            pathType: Prefix # See more at https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types
